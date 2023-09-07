@@ -1,0 +1,21 @@
+services:
+  redis:
+    image: redislabs/redismod
+    restart: always
+    container_name: redis
+    ports:
+      - '6379:6379'
+
+  proxy_service:
+    image: proxy_service_image
+    hostname: proxy_service
+    container_name: proxy_service
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./strangling_monolith:/strangling_monolith
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
