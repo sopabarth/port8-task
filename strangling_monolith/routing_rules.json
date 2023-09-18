@@ -1,5 +1,1 @@
-{
-  "path1/1": "LEGACY",
-  "path1/2": "MODERN",
-  "path2": "MODERN"
-}
+{"path1/1": "LEGACY", "path1/2": "MODERN", "path2": "MODERN", "weblog": "MODERN", "api/users": "LEGACY", "/": "MODERN", "key1": "MODERN"}

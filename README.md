@@ -1,11 +1,13 @@
 # port8-task
 
 ## Instructions
-- Use Django 
+
+- Use Django
 - Use version control GIT (the more commits, the better) – submit your work and send us a
-link to your repo
+  link to your repo
 
 ## Main Task - Strangling the monolith
+
 **Problem:** How to migrate a legacy monolithic application to a microservice architecture?
 
 **Assignment:** Implement a simple proxy service with which we can effectively apply a strangler
@@ -26,8 +28,9 @@ be considered out of scope for this assignment.
 Please, implement at least one unit and one integration test in your solution.
 
 **Bonus points:**
+
 - Use Redis to implement externally controllable limiter for throttle control (do not let more than
-1M RPS into the system)
+  1M RPS into the system)
 - Provide endpoint for Prometheus based metrics
 - Provide status endpoints for readiness and liveness probes
 - Execute the app as one or more stateless processes
@@ -37,7 +40,28 @@ Please, implement at least one unit and one integration test in your solution.
 - Implement request draining strategy on process shutdown
 
 ## Run the solution
+
 ```commandline
 docker build -t <image_name> .
 docker-compose up --build
 ```
+
+### Usage
+
+Sending request to `localhost:8000/api/users/` should redirect to 'legacy' endpoint `reqres.in`.
+Sending request to `localhost:8000/weblog/` should redirect to 'modern' endpoint `www.djangoproject.com`.
+To add/update rules, send post request to `localhost:8000/add-rule/` with data
+
+```json
+{
+  "key": "key1",
+  "value": "MODERN"
+}
+```
+
+To access Prometheus:
+
+`http://localhost:9090/targets`
+
+RPS limiter is set to 1,000,000 requests per second, if value need to be changed it can be done in file `rps_limiter.py`
+by setting `max_rps` to desired value.

@@ -6,7 +6,7 @@ services:
     ports:
       - '6379:6379'
 
-  proxy_service:
+  proxy-service:
     image: proxy_service_image
     hostname: proxy_service
     container_name: proxy_service
@@ -19,3 +19,27 @@ services:
       - .env
     depends_on:
       - redis
+      - test-proxy-service
+
+  test-proxy-service:
+    image: proxy_service_image
+    hostname: test_proxy_service
+    container_name: test_proxy_service
+    command: python manage.py test proxy_service.tests
+    volumes:
+      - ./strangling_monolith:/strangling_monolith
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    ports:
+      - "9090:9090"
+    depends_on:
+      - proxy-service
